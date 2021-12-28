@@ -92,8 +92,8 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
                  	//customerRepo.changeCustomerStatus(taskId,"Review Success"); 
                  	customerRepo.changeCustomerStatusByProcessInstanceId(processInstanceId, "Review Success");
                  	logger.info("**********************Status Changed to : Review Success");
-                    double  loaninterest = customerRepo.getLoanInterestByProcessInstaceId(processInstanceId);
-                 	customerRepo.changeLoanInterestByProcessInstanceId(processInstanceId, loaninterest);
+//                    double  loaninterest = customerRepo.getLoanInterestByProcessInstaceId(processInstanceId);
+//                 	customerRepo.changeLoanInterestByProcessInstanceId(processInstanceId, loaninterest);
                     logger.info("*****Loan interest changed*******");                 	
                  	
                  	           }

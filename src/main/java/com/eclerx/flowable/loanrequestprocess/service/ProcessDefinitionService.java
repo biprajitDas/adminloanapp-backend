@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.flowable.engine.runtime.Execution;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.eclerx.flowable.loanrequestprocess.pojo.ProcessInstanceJson;
 

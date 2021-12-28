@@ -16,6 +16,9 @@ public interface CustomerRepository extends JpaRepository<Customer,Integer> {
 	@Query("FROM Customer WHERE status=:state")
 	List<Customer> findCustomersByStatus(String state);
 	
+	@Query(value="SELECT COUNT(*) FROM Customer c WHERE c.current_task_assignee=:assignee AND c.current_task_name=:taskName", nativeQuery=true)
+	int findNumberOfTasksByAssignee(String assignee,String taskName);
+	
 	@Query("FROM Customer WHERE customerId=:id")
 	Customer findCustomerById(int id);
 	

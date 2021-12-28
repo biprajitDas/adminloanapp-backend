@@ -70,5 +70,14 @@ public class CustomerRestController {
 	public List<Customer[]> findCustomersByAssignee(@PathVariable String assigneeUserId){
 		return customerRepo.findCustomerDetailsByAssignee(assigneeUserId);
 	}
-
+   
+	@GetMapping("/loanreviews/{assignee}")
+	public int findLoanReviewsByAssignee(@PathVariable String assignee) {
+		return customerRepo.findNumberOfTasksByAssignee(assignee,"Loan Review");
+	}
+	
+	@GetMapping("/loanapprovals/{assignee}")
+	public int findLoanApprovalsByAssignee(@PathVariable String assignee) {
+		return customerRepo.findNumberOfTasksByAssignee(assignee,"Loan Approval");
+	}
 }

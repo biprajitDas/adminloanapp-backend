@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name= "Customer", schema = "eclerx-flowable-db")
+@Table(name= "Customer")
 public class Customer {
 	  @Id
 	  @GeneratedValue

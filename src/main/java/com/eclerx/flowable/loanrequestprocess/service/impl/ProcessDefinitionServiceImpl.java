@@ -16,11 +16,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.eclerx.flowable.loanrequestprocess.pojo.Customer;
 import com.eclerx.flowable.loanrequestprocess.pojo.ProcessInstanceJson;
+import com.eclerx.flowable.loanrequestprocess.repo.CustomerRepository;
 import com.eclerx.flowable.loanrequestprocess.service.CustomerService;
+import com.eclerx.flowable.loanrequestprocess.service.FileStorageService;
 import com.eclerx.flowable.loanrequestprocess.service.ProcessDefinitionService;
 
 @Service
@@ -40,6 +44,13 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
     
     @Autowired(required=false)
     protected BpmnRestApiInterceptor restApiInterceptor;
+    
+    @Autowired
+    private FileStorageService fileStorageService;
+    
+    @Autowired
+    protected CustomerRepository customerRepo;
+   
     
 	@Override
 	public String startProcessInstance(String processKey, Map<String, Object> processVars) {
@@ -83,11 +94,19 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
 			String current_task_assignee = customerService.getTaskAssineeByProcessInstaId(processInstance.getProcessInstanceId());
             logger.info("**********current_task_assignee*****************");
             logger.info(current_task_assignee);
+            
+            double  loaninterest = customerRepo.getLoanInterestByProcessInstaceId(processInstance.getProcessInstanceId());
+         	//customerRepo.changeLoanInterestByProcessInstanceId(processInstance.getProcessInstanceId(), loaninterest);
+         	
+         	
 			Customer customer = new Customer(firstName, lastName, dateofbirth,address, city,state,
 					country,pincode, pannumber,aadharnumber, uploadaadharcard, uploadpancard,
-					loanType,loanamount, loanterm,0, mail, status,reviewer_comment,approver_comment,process_definition_key,
+					loanType,loanamount, loanterm,loaninterest, mail, status,reviewer_comment,approver_comment,process_definition_key,
 					process_instance_id, current_task_id, current_task_name,current_task_assignee);
 			customerService.saveCustomer(customer);
+			
+			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

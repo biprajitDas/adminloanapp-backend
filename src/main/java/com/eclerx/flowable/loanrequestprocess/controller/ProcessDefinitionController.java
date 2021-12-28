@@ -29,9 +29,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.eclerx.flowable.loanrequestprocess.pojo.ProcessInstanceJson;
+import com.eclerx.flowable.loanrequestprocess.service.FileStorageService;
 import com.eclerx.flowable.loanrequestprocess.service.ProcessDefinitionService;
 
 
@@ -51,9 +55,13 @@ public class ProcessDefinitionController {
 	  @Autowired
 	  private ProcessEngineConfiguration processEngineConfiguration;
 	  
+	
+	  
 	@PostMapping("/start")
 	public ResponseEntity<String> startProcessInstance(@RequestHeader("processKey") String processId,
-			@RequestBody Map<String, Object> processVars) {
+			@RequestBody Map<String, Object>  processVars
+			) {	
+		
 		return new ResponseEntity<String>(processDefinitionService.startProcessInstance(processId, processVars),
 				HttpStatus.CREATED);
 

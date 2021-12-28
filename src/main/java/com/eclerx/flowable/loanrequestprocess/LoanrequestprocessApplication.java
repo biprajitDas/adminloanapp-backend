@@ -11,11 +11,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import com.eclerx.flowable.loanrequestprocess.pojo.Customer;
+import com.eclerx.flowable.loanrequestprocess.property.FileStorageProperties;
 import com.eclerx.flowable.loanrequestprocess.service.CustomerService;
 
+
 @SpringBootApplication
+@EnableConfigurationProperties({
+    FileStorageProperties.class
+})
 public class LoanrequestprocessApplication {
     
 	Logger logger = LoggerFactory.getLogger(LoanrequestprocessApplication.class);
