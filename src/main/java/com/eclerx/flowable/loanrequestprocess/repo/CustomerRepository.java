@@ -33,15 +33,114 @@ public interface CustomerRepository extends JpaRepository<Customer,Integer> {
 	
 	@Query("FROM Customer WHERE process_instance_id=:processInstaId")
 	Customer findCustomerByProcessInstanceId(String processInstaId);
-	
-	@Query(value="SELECT first_name,last_name,date_of_birth,address,city,state,country,pincode,pannumber,aadharnumber,uploadaadharcard,uploadpancard,loan_type,loanterm,mail,current_task_id,current_task_name FROM Customer c WHERE c.current_task_name=:taskName",nativeQuery = true)
-	List<String[]> findCustomerDetails(String taskName);
-	
 
-//	@Query(value="SELECT first_name,last_name,date_of_birth,address,city,state,country,pincode,pannumber,aadharnumber,uploadaadharcard,uploadpancard,loan_type,loanterm,mail,current_task_id,current_task_name FROM Customer c WHERE c.current_task_assignee=:assigneeUserId",nativeQuery = true)
-//	List<String[]> findCustomerDetailsByAssignee(String assigneeUserId);
+	@Query("FROM Customer WHERE approver=:assignee AND status=:approvedStatus")
+	List<Customer> findApprovalStatusLoanCustomers(String assignee, String approvedStatus);
+	
+	@Query("FROM Customer WHERE reviewer=:assignee AND status=:approvedStatus")
+	List<Customer> findReviewStatusLoanCustomers(String assignee, String approvedStatus);
+	 
 	@Query(value="SELECT * FROM Customer c WHERE c.current_task_assignee=:assigneeUserId",nativeQuery = true)
-	List<Customer[]> findCustomerDetailsByAssignee(String assigneeUserId);
+	List<Customer> findCustomerDetailsByAssignee(String assigneeUserId);
+	
+	@Query(value="SELECT COUNT(*) FROM Customer c WHERE c.reviewer=:assignee AND YEAR(c.reviewed_date) = YEAR(CURRENT_DATE()) AND MONTH(c.reviewed_date) = MONTH(CURRENT_DATE())",
+			nativeQuery=true)
+	int findCurrentMonthReviewedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM Customer c WHERE (c.reviewer=:assignee OR c.approver=:assignee) AND YEAR(c.rejected_date) = YEAR(CURRENT_DATE()) AND MONTH(c.rejected_date) = MONTH(CURRENT_DATE())",
+			nativeQuery=true)
+	int findCurrentMonthRejectedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM Customer c WHERE c.approver=:assignee AND YEAR(c.approved_date) = YEAR(CURRENT_DATE()) AND MONTH(c.approved_date) = MONTH(CURRENT_DATE())",
+			nativeQuery=true)
+	int findCurrentMonthApprovedCustomers(String assignee);
+	
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE c.reviewer=:assignee AND c.reviewed_date>NOW()-INTERVAL 1 MONTH",
+			nativeQuery=true)
+	int findLastMonthReviewedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE (c.reviewer=:assignee OR c.approver=:assignee) AND c.rejected_date>NOW()-INTERVAL 1 MONTH",
+			nativeQuery=true)
+	int findLastMonthRejectedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE  c.approver=:assignee AND c.approved_date>NOW()-INTERVAL 1 MONTH",
+			nativeQuery=true)
+	int findLastMonthApprovedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE c.reviewer=:assignee AND c.reviewed_date>NOW()-INTERVAL 6 MONTH",
+			nativeQuery=true)
+	int findLastSixMonthsReviewedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE (c.reviewer=:assignee OR c.approver=:assignee) AND c.rejected_date>NOW()-INTERVAL 6 MONTH",
+			nativeQuery=true)
+	int findLastSixMonthsRejectedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE  c.approver=:assignee AND c.approved_date>NOW()-INTERVAL 6 MONTH",
+			nativeQuery=true)
+	int findLastSixMonthsApprovedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE c.reviewer=:assignee AND MONTH(c.reviewed_date)=MONTH(NOW()-INTERVAL 1 MONTH)",
+			nativeQuery=true)
+	int findLastOneMonthReviewedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE (c.reviewer=:assignee OR c.approver=:assignee) AND MONTH(c.rejected_date)=MONTH(NOW()-INTERVAL 1 MONTH)",
+			nativeQuery=true)
+	int findLastOneMonthRejectedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE  c.approver=:assignee AND MONTH(c.approved_date)=MONTH(NOW()-INTERVAL 1 MONTH)",
+			nativeQuery=true)
+	int findLastOneMonthApprovedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE c.reviewer=:assignee AND MONTH(c.reviewed_date)=MONTH(NOW()-INTERVAL 2 MONTH)",
+			nativeQuery=true)
+	int findLastTwoMonthsReviewedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE (c.reviewer=:assignee OR c.approver=:assignee) AND MONTH(c.rejected_date)=MONTH(NOW()-INTERVAL 2 MONTH)",
+			nativeQuery=true)
+	int findLastTwoMonthsRejectedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE  c.approver=:assignee AND MONTH(c.approved_date)=MONTH(NOW()-INTERVAL 2 MONTH)",
+			nativeQuery=true)
+	int findLastTwoMonthsApprovedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE c.reviewer=:assignee AND MONTH(c.reviewed_date)=MONTH(NOW()-INTERVAL 3 MONTH)",
+			nativeQuery=true)
+	int findLastThreeMonthsReviewedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE (c.reviewer=:assignee OR c.approver=:assignee) AND MONTH(c.rejected_date)=MONTH(NOW()-INTERVAL 3 MONTH)",
+			nativeQuery=true)
+	int findLastThreeMonthsRejectedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE  c.approver=:assignee AND MONTH(c.approved_date)=MONTH(NOW()-INTERVAL 3 MONTH)",
+			nativeQuery=true)
+	int findLastThreeMonthsApprovedCustomers(String assignee);
+	
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE c.reviewer=:assignee AND MONTH(c.reviewed_date)=MONTH(NOW()-INTERVAL 4 MONTH)",
+			nativeQuery=true)
+	int findLastFourMonthsReviewedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE (c.reviewer=:assignee OR c.approver=:assignee) AND MONTH(c.rejected_date)=MONTH(NOW()-INTERVAL 4 MONTH)",
+			nativeQuery=true)
+	int findLastFourMonthsRejectedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE  c.approver=:assignee AND MONTH(c.approved_date)=MONTH(NOW()-INTERVAL 4 MONTH)",
+			nativeQuery=true)
+	int findLastFourMonthsApprovedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE c.reviewer=:assignee AND MONTH(c.reviewed_date)=MONTH(NOW()-INTERVAL 5 MONTH)",
+			nativeQuery=true)
+	int findLastFiveMonthsReviewedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE (c.reviewer=:assignee OR c.approver=:assignee) AND MONTH(c.rejected_date)=MONTH(NOW()-INTERVAL 5 MONTH)",
+			nativeQuery=true)
+	int findLastFiveMonthsRejectedCustomers(String assignee);
+	
+	@Query(value="SELECT COUNT(*) FROM CUSTOMER c WHERE  c.approver=:assignee AND MONTH(c.approved_date)=MONTH(NOW()-INTERVAL 5 MONTH)",
+			nativeQuery=true)
+	int findLastFiveMonthsApprovedCustomers(String assignee);
+	
 	
 	@Transactional()
 	@Modifying(clearAutomatically = true)
@@ -90,5 +189,32 @@ public interface CustomerRepository extends JpaRepository<Customer,Integer> {
 	@Modifying(clearAutomatically = true)
 	@Query(value="UPDATE Customer c SET c.loaninterest=:loaninterest1 WHERE c.process_instance_id =:processInstaId",nativeQuery=true)
 	void changeLoanInterestByProcessInstanceId(String processInstaId,double loaninterest1);
+	
+	@Transactional()
+	@Modifying(clearAutomatically = true)
+	@Query(value="UPDATE Customer c SET c.approved_date=:date WHERE c.process_instance_id =:processInstaId",nativeQuery=true)
+	void changeApprovedDateByProcessInstanceId(String processInstaId,Date date);
+	
+	@Transactional()
+	@Modifying(clearAutomatically = true)
+	@Query(value="UPDATE Customer c SET c.reviewed_date=:date WHERE c.process_instance_id =:processInstaId",nativeQuery=true)
+	void changeReviewedDateByProcessInstanceId(String processInstaId,Date date);
+	
+	@Transactional()
+	@Modifying(clearAutomatically = true)
+	@Query(value="UPDATE Customer c SET c.rejected_date=:date WHERE c.process_instance_id =:processInstaId",nativeQuery=true)
+	void changeRejectedDateByProcessInstanceId(String processInstaId,Date date);
+	
+	@Transactional()
+	@Modifying(clearAutomatically = true)
+	@Query(value="UPDATE Customer c SET c.reviewer=:reviewer WHERE c.process_instance_id =:processInstaId",nativeQuery=true)
+	
+	void changeReviewerByProcessInstanceId(String processInstaId,String reviewer);
+	@Transactional()
+	@Modifying(clearAutomatically = true)
+	@Query(value="UPDATE Customer c SET c.approver=:approver WHERE c.process_instance_id =:processInstaId",nativeQuery=true)
+	void changeApproverByProcessInstanceId(String processInstaId,String approver);
+	
+	
 	
 }

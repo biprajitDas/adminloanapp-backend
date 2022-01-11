@@ -57,7 +57,12 @@ public class Customer {
 	  private String current_task_name;
 	  @Column(name="current_task_assignee")
 	  private String current_task_assignee;
-	  
+	  private Date started_date;
+	  private Date rejected_date;
+	  private Date reviewed_date;
+	  private Date approved_date;
+	  private String approver;
+	  private String reviewer;
 	public Customer() {
 		super();
 	}
@@ -68,7 +73,7 @@ public class Customer {
 			String mail, String status,String reviewer_comment,
 			String approver_comment,
 			String processDefinitionKey, String processInstanceId, String current_task_id, String current_task_name,
-			String current_task_assignee) {
+			String current_task_assignee,Date started_date,Date rejected_date, Date reviewed_date, Date approved_date,String reviewer,String approver) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -95,6 +100,12 @@ public class Customer {
 		this.current_task_id = current_task_id;
 		this.current_task_name = current_task_name;
 		this.current_task_assignee = current_task_assignee;
+		this.started_date=started_date;
+		this.rejected_date = rejected_date;
+		this.reviewed_date=reviewed_date;
+		this.approved_date=approved_date;
+		this.reviewer=reviewer;
+		this.approver=approver;
 	}
 
 	public String getLoanamount() {
@@ -305,7 +316,35 @@ public class Customer {
 		this.current_task_assignee = current_task_assignee;
 	}
 
+	public Date getStarted_date() {
+		return started_date;
+	}
 
-	
+	public void setStarted_date(Date started_date) {
+		this.started_date = started_date;
+	}
+
+	public Date getRejected_date() {
+		return rejected_date;
+	}
+
+	public void setRejected_date(Date rejected_date) {
+		this.rejected_date = rejected_date;
+	}
+
+	public Date getReviewed_date() {
+		return reviewed_date;
+	}
+
+	public void setReviewed_date(Date reviewed_date) {
+		this.reviewed_date = reviewed_date;
+	}
+
+	public Date getApproved_date() {
+		return approved_date;
+	}
+	public void setApproved_date(Date approved_date) {
+		this.approved_date = approved_date;
+	}
 	
 }

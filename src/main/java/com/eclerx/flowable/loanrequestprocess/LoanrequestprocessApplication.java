@@ -1,5 +1,11 @@
 package com.eclerx.flowable.loanrequestprocess;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -35,14 +41,9 @@ public class LoanrequestprocessApplication {
 		SpringApplication.run(LoanrequestprocessApplication.class, args);
 	}
 	@PostConstruct
-	public void fetchProcessInstances() {
-		List<ProcessInstance> processInstances = runtimeService.createProcessInstanceQuery().active().list();
-		//logger.info("Active process instances size : {}", processInstances.size());
-		//logger.info("*****************adding Customer.***********************************");
-//		Customer customer = new Customer(103,"Pavan","Kalyan","Home Loan","Review Success","","","","");
-		//logger.info("***********************Customer added Succesfully.*******************");
-		//customerService.saveCustomer(customer);
-
+	public void fetchProcessInstances() throws ParseException {
+		
+		List<ProcessInstance> processInstances = runtimeService.createProcessInstanceQuery().active().list();	
 	}
 
 }

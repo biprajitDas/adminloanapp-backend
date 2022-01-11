@@ -1,5 +1,8 @@
 package com.eclerx.flowable.loanrequestprocess.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -67,6 +70,12 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
 		
 		try {
 		     String processInstanceId = customerRepo.findCurrentProcessInstaceId(taskId);
+		     String taskAssignee = customerService.getTaskAssineeByProcessInstaId(processInstanceId);
+		     LocalDate localDate = LocalDate.now();
+	            LocalDateTime localDateTime = LocalDateTime.now();
+	            LocalDate localDate1 = localDateTime.toLocalDate();
+	         	logger.info("**** Current time***** : " + localDate1);
+	          Date d = new SimpleDateFormat("yyyy-MM-dd").parse(localDate1.toString());
 		     logger.info("***************Current Process Instance Id:");
 		     logger.info(processInstanceId);
 			String current_task_name1=customerService.findCurrentTaskName(processInstanceId);
@@ -78,6 +87,7 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
             String approverComment = (String) taskVars.get("approvercomment");
            // List<Map<String, Object>> outputVariables = dmnRuleService.executeDecisionByKey(decisionTableInputJson.getDecisionKey(), decisionTableInputJson.getInputVariables());
             if(current_task_name1.equals("Loan Review")) {
+            	customerRepo.changeReviewerByProcessInstanceId(processInstanceId,taskAssignee);
             	logger.info("*******Loan Review******");
             	 if(isDetailsMissing==(Object)true) {
                  	//customer.setStatus("Details Missing");
@@ -90,6 +100,8 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
                  	logger.info("review success"); 
                  	//customer.setStatus("Review Success");
                  	//customerRepo.changeCustomerStatus(taskId,"Review Success"); 
+                 	
+                 	customerRepo.changeReviewedDateByProcessInstanceId(processInstanceId, d);
                  	customerRepo.changeCustomerStatusByProcessInstanceId(processInstanceId, "Review Success");
                  	logger.info("**********************Status Changed to : Review Success");
 //                    double  loaninterest = customerRepo.getLoanInterestByProcessInstaceId(processInstanceId);
@@ -101,10 +113,12 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
                  	logger.info("review failed"); 
                  	//customer.setStatus("Review Failed");
                  	//customerRepo.changeCustomerStatus(taskId,"Review Failed"); 
+                 	 customerRepo.changeRejectedDateByProcessInstanceId(processInstanceId,d);
                  	customerRepo.changeCustomerStatusByProcessInstanceId(processInstanceId, "Review Failed");
                  	logger.info("*********************Status Changed to : Review Fail");
       
                  }
+            	
             	 customerRepo.changeCustomerReviewerCommentByProcessInstanceId(processInstanceId,reviewerComment);
             }
             else if(current_task_name1.equals("Loan Request Update")) {
@@ -131,10 +145,12 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
 
             }
             else if(current_task_name1.equals("Loan Approval")) {
+            	customerRepo.changeApproverByProcessInstanceId(processInstanceId,taskAssignee);
             	logger.info("*******Loan Approval******");
             	 if(isLoanApproved==(Object)true) {
                  	//customer.setStatus("Loan Approved");
             		// customerRepo.changeCustomerStatus(taskId,"Loan Approved"); 
+            		 customerRepo.changeApprovedDateByProcessInstanceId(processInstanceId, d);
             		 customerRepo.changeCustomerStatusByProcessInstanceId(processInstanceId, "Loan Approved");
             		 logger.info("*********************Status Changed to : Loan Approved");
                  }
@@ -142,6 +158,7 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
                  	logger.info("loan success"); 
                  	//customer.setStatus("Loan Rejected");
                  	//customerRepo.changeCustomerStatus(taskId,"Loan Rejected"); 
+                 	customerRepo.changeRejectedDateByProcessInstanceId(processInstanceId, d);
                  	customerRepo.changeCustomerStatusByProcessInstanceId(processInstanceId, "Loan Rejected");
                  	logger.info("*********************Status Changed to : Loan Rejected");
                  }

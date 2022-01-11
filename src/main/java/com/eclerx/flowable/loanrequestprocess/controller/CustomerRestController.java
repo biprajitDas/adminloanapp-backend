@@ -1,5 +1,6 @@
 package com.eclerx.flowable.loanrequestprocess.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -56,18 +57,10 @@ public class CustomerRestController {
 		return customerService.findCustomerById(id);
 	}
 
-	
-	@GetMapping("/customers/{taskname}")
-	public List<String[]> findLoanReviewCustomers(@PathVariable String taskname){
-		return customerRepo.findCustomerDetails(taskname);
-	}
-//	@GetMapping("/loanapprovalcustomers")
-//	public List<String[]> findLoanApprovalCustomers(String str2){
-//		return customerRepo.findCustomerDetails(str2);
-//	}
+
 	
 	@GetMapping("/customers/assignee/{assigneeUserId}")
-	public List<Customer[]> findCustomersByAssignee(@PathVariable String assigneeUserId){
+	public List<Customer> findCustomersByAssignee(@PathVariable String assigneeUserId){
 		return customerRepo.findCustomerDetailsByAssignee(assigneeUserId);
 	}
    
@@ -79,5 +72,104 @@ public class CustomerRestController {
 	@GetMapping("/loanapprovals/{assignee}")
 	public int findLoanApprovalsByAssignee(@PathVariable String assignee) {
 		return customerRepo.findNumberOfTasksByAssignee(assignee,"Loan Approval");
+	}
+
+	
+	@GetMapping("/approved-loan/{approver}")
+	public List<Customer> findApprovedLoanCust(@PathVariable String approver) {
+		return customerRepo.findApprovalStatusLoanCustomers(approver, "Loan Approved");
+	}
+	
+	@GetMapping("/rejected-loan/{approver}")
+	public List<Customer> findRejectedLoanCust(@PathVariable String approver) {
+		return customerRepo.findApprovalStatusLoanCustomers(approver, "Loan Rejected");
+	}
+
+	@GetMapping("/review-failed-loan/{reviewer}")
+	public List<Customer> findFailedReviewLoanCust(@PathVariable String reviewer) {
+		return customerRepo.findReviewStatusLoanCustomers(reviewer, "Review Failed");
+	}
+	
+	@GetMapping("/currentmonth/{assignee}")
+	public List<Integer> findCurrentMonthsData(@PathVariable String assignee){
+		List<Integer> list = new ArrayList<Integer>();
+		int x = customerRepo.findCurrentMonthReviewedCustomers(assignee);
+		int y = customerRepo.findCurrentMonthRejectedCustomers(assignee);
+		int z = customerRepo.findCurrentMonthApprovedCustomers(assignee);
+		list.add(x);
+		list.add(y);
+		list.add(z);
+		return list;
+	}
+	@GetMapping("/lastmonth/{assignee}")
+	public List<Integer> findLastMonthsData(@PathVariable String assignee){
+		List<Integer> list = new ArrayList<Integer>();
+		int x = customerRepo.findLastMonthReviewedCustomers(assignee);
+		int y = customerRepo.findLastMonthRejectedCustomers(assignee);
+		int z = customerRepo.findLastMonthApprovedCustomers(assignee);
+		list.add(x);
+		list.add(y);
+		list.add(z);
+		return list;
+	}
+	@GetMapping("/lastsixmonths/{assignee}")
+	public List<Integer> findLastSixMonthsData(@PathVariable String assignee){
+		List<Integer> list = new ArrayList<Integer>();
+		int x = customerRepo.findLastSixMonthsReviewedCustomers(assignee);
+		int y = customerRepo.findLastSixMonthsRejectedCustomers(assignee);
+		int z = customerRepo.findLastSixMonthsApprovedCustomers(assignee);
+		list.add(x);
+		list.add(y);
+		list.add(z);
+		return list;
+	}
+	
+	@GetMapping("/eachmonthdata/{assignee}")
+	public List<Integer> findEachMonthsData(@PathVariable String assignee){
+		List<Integer> list = new ArrayList<Integer>();
+		int x = customerRepo.findCurrentMonthReviewedCustomers(assignee);
+		int y = customerRepo.findCurrentMonthRejectedCustomers(assignee);
+		int z = customerRepo.findCurrentMonthApprovedCustomers(assignee);
+		list.add(x);
+		list.add(y);
+		list.add(z);
+		int x2 = customerRepo.findLastOneMonthReviewedCustomers(assignee);
+		int y2 = customerRepo.findLastOneMonthRejectedCustomers(assignee);
+		int z2 = customerRepo.findLastOneMonthApprovedCustomers(assignee);
+		list.add(x2);
+		list.add(y2);
+		list.add(z2);
+		int x3 = customerRepo.findLastTwoMonthsReviewedCustomers(assignee);
+		int y3 = customerRepo.findLastTwoMonthsRejectedCustomers(assignee);
+		int z3 = customerRepo.findLastTwoMonthsApprovedCustomers(assignee);
+		list.add(x3);
+		list.add(y3);
+		list.add(z3);
+		int x4 = customerRepo.findLastThreeMonthsReviewedCustomers(assignee);
+		int y4 = customerRepo.findLastThreeMonthsRejectedCustomers(assignee);
+		int z4 = customerRepo.findLastThreeMonthsApprovedCustomers(assignee);
+		list.add(x4);
+		list.add(y4);
+		list.add(z4);
+		int x5 = customerRepo.findLastFourMonthsReviewedCustomers(assignee);
+		int y5 = customerRepo.findLastFourMonthsRejectedCustomers(assignee);
+		int z5 = customerRepo.findLastFourMonthsApprovedCustomers(assignee);
+		list.add(x5);
+		list.add(y5);
+		list.add(z5);
+		int x6 = customerRepo.findLastFiveMonthsReviewedCustomers(assignee);
+		int y6 = customerRepo.findLastFiveMonthsRejectedCustomers(assignee);
+		int z6 = customerRepo.findLastFiveMonthsApprovedCustomers(assignee);
+		list.add(x6);
+		list.add(y6);
+		list.add(z6);
+		
+		int x7 = customerRepo.findLastSixMonthsReviewedCustomers(assignee);
+		int y7 = customerRepo.findLastSixMonthsRejectedCustomers(assignee);
+		int z7 = customerRepo.findLastSixMonthsApprovedCustomers(assignee);
+		list.add(x7);
+		list.add(y7);
+		list.add(z7);
+		return list;
 	}
 }

@@ -2,6 +2,8 @@ package com.eclerx.flowable.loanrequestprocess.service.impl;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -97,12 +99,17 @@ public class ProcessDefinitionServiceImpl implements ProcessDefinitionService {
             
             double  loaninterest = customerRepo.getLoanInterestByProcessInstaceId(processInstance.getProcessInstanceId());
          	//customerRepo.changeLoanInterestByProcessInstanceId(processInstance.getProcessInstanceId(), loaninterest);
-         	
+            LocalDate localDate = LocalDate.now();
+            LocalDateTime localDateTime = LocalDateTime.now();
+            LocalDate localDate1 = localDateTime.toLocalDate();
+         	logger.info("**** Current time***** : " + localDateTime);
+         	logger.info("**** Current Date  Time***** : " + LocalDateTime.now());
+         	Date d = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(localDateTime.toString());
          	
 			Customer customer = new Customer(firstName, lastName, dateofbirth,address, city,state,
 					country,pincode, pannumber,aadharnumber, uploadaadharcard, uploadpancard,
 					loanType,loanamount, loanterm,loaninterest, mail, status,reviewer_comment,approver_comment,process_definition_key,
-					process_instance_id, current_task_id, current_task_name,current_task_assignee);
+					process_instance_id, current_task_id, current_task_name,current_task_assignee,d,null,null,null,null,null);
 			customerService.saveCustomer(customer);
 			
 			
