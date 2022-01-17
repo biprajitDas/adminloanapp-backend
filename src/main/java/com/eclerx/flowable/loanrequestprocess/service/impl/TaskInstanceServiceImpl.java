@@ -90,8 +90,7 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
             	customerRepo.changeReviewerByProcessInstanceId(processInstanceId,taskAssignee);
             	logger.info("*******Loan Review******");
             	 if(isDetailsMissing==(Object)true) {
-                 	//customer.setStatus("Details Missing");
-            		 //customerRepo.changeCustomerStatus(taskId,"Details Misiing"); 
+                 	 
             		 customerRepo.changeCustomerStatusByProcessInstanceId(processInstanceId, "Details Missing");
             		 logger.info("****************Status Changed to :Details Missing");
             		
@@ -151,7 +150,7 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
                  	//customer.setStatus("Loan Approved");
             		// customerRepo.changeCustomerStatus(taskId,"Loan Approved"); 
             		 customerRepo.changeApprovedDateByProcessInstanceId(processInstanceId, d);
-            		 customerRepo.changeCustomerStatusByProcessInstanceId(processInstanceId, "Loan Approved");
+            		 customerRepo.changeCustomerStatusByProcessInstanceId(processInstanceId, "Approved");
             		 logger.info("*********************Status Changed to : Loan Approved");
                  }
                  else if(isLoanApproved==(Object)false) {
@@ -159,8 +158,8 @@ public class TaskInstanceServiceImpl implements TaskInstanceService {
                  	//customer.setStatus("Loan Rejected");
                  	//customerRepo.changeCustomerStatus(taskId,"Loan Rejected"); 
                  	customerRepo.changeRejectedDateByProcessInstanceId(processInstanceId, d);
-                 	customerRepo.changeCustomerStatusByProcessInstanceId(processInstanceId, "Loan Rejected");
-                 	logger.info("*********************Status Changed to : Loan Rejected");
+                 	customerRepo.changeCustomerStatusByProcessInstanceId(processInstanceId, "Rejected");
+                 	logger.info("*********************Status Changed to : Rejected");
                  }
             	 customerRepo.changeCustomerApproverCommentByProcessInstanceId(processInstanceId, approverComment);
             }

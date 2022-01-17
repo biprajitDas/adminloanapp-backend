@@ -77,12 +77,12 @@ public class CustomerRestController {
 	
 	@GetMapping("/approved-loan/{approver}")
 	public List<Customer> findApprovedLoanCust(@PathVariable String approver) {
-		return customerRepo.findApprovalStatusLoanCustomers(approver, "Loan Approved");
+		return customerRepo.findApprovalStatusLoanCustomers(approver, "Approved");
 	}
 	
 	@GetMapping("/rejected-loan/{approver}")
 	public List<Customer> findRejectedLoanCust(@PathVariable String approver) {
-		return customerRepo.findApprovalStatusLoanCustomers(approver, "Loan Rejected");
+		return customerRepo.findApprovalStatusLoanCustomers(approver, "Rejected");
 	}
 
 	@GetMapping("/review-failed-loan/{reviewer}")
